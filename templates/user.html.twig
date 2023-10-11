@@ -79,20 +79,25 @@
 {% endfor %}
 
 <h1>Add user form</h1>
-{#<form action="/user" method="POST">#}
-{#    <label for="firstname">First name:</label><br>#}
-{#    <input type="text" id="firstname" name="firstname"><br>#}
-{#    <label for="lastname">Last name:</label><br>#}
-{#    <input type="text" id="lastname" name="lastname"><br>#}
-{#    <label for="address">Address:</label><br>#}
-{#    <input type="text" id="address" name="address"><br><br>#}
-{#    <input type="submit" value="Add user">#}
-{#</form>#}
-
 {{ form_start(form) }}
-    {{ form_row(form.firstName) }}
-    {{ form_row(form.lastName) }}
-    {{ form_row(form.address) }}
+
+    {{ form_label(form.firstName) }}
+    {{ form_widget(form.firstName) }}
+    {% if errors['firstName'] is defined %}
+        <li>{{ errors['firstName'] }}</li>
+    {% endif %}
+
+    {{ form_label(form.lastName) }}
+    {{ form_widget(form.lastName) }}
+    {% if errors['lastName'] is defined %}
+        <li>{{ errors['lastName'] }}</li>
+    {% endif %}
+
+    {{ form_label(form.address) }}
+    {{ form_widget(form.address) }}
+    {% if errors['address'] is defined %}
+        <li>{{ errors['address'] }}</li>
+    {% endif %}
     <input type="submit" value="Add user">
 {{ form_end(form) }}
 

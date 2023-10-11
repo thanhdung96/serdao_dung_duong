@@ -18,7 +18,7 @@ class User
 
     #[ORM\Column(length: 128)]
     #[NotBlank]
-    #[Length(min: 1, max: 128)]
+    #[Length(min: 1, max: 2)]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 128)]

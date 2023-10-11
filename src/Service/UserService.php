@@ -4,12 +4,20 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class UserService
 {
+    private ValidatorService $validatorService;
+
     public function __construct(
         private readonly UserRepository $userRepository
     ) { }
+
+    #[Required]
+    public function setValidatorService(ValidatorService $validatorService): void{
+        $this->validatorService = $validatorService;
+    }
 
     public function findAllUsers(): array {
         return $this->userRepository->findAll();
@@ -28,6 +36,6 @@ class UserService
     }
 
     public function validateUser(User $user): array{
-        return [];
+        return $this->validatorService->validate($user);
     }
 }
