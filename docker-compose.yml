@@ -1,21 +1,24 @@
 version: '3'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-15}-alpine
+  mariadb:
+    image: docker.io/bitnami/mariadb:11.0
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=symfony
+      - MARIADB_DATABASE=symfony
+  symfony:
+    image: docker.io/bitnami/symfony:6.3
+    ports:
+      - '8000:8000'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - SYMFONY_DATABASE_HOST=mariadb
+      - SYMFONY_DATABASE_PORT_NUMBER=3306
+      - SYMFONY_DATABASE_USER=symfony
+      - SYMFONY_DATABASE_NAME=symfony
+      - SYMFONY_PROJECT_SKELETON=symfony/skeleton
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
-
-volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+      - './app:/app'
+    depends_on:
+      - mariadb
